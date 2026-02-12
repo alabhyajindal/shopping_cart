@@ -1,0 +1,5 @@
+package example:max-total@0.1.0;
+
+world max-total {
+    export validate: func(cart-json: string) -> string;
+}
