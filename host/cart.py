@@ -41,11 +41,14 @@ class ShoppingCart:
 
     def _validate_cart(self) -> Optional[str]:
         cart_json = self.to_json()
+        errors: List[str] = []
         for plugin_name, plugin in self._plugins.items():
             result = json.loads(plugin.validate(self._store, cart_json))
             if not result.get("ok"):
                 error = result.get("error", "Plugin validation failed")
-                return f"[{plugin_name}] {error}"
+                errors.append(f"[{plugin_name}] {error}")
+        if errors:
+            return "\n".join(errors)
         return None
 
     def add_item(self, item: CartItem) -> None:

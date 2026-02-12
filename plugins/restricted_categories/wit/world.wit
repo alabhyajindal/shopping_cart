@@ -1,0 +1,6 @@
+package example:restricted-categories@0.1.0;
+
+world restricted-categories {
+    export validate: func(cart-json: string) -> string;
+}
+

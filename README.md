@@ -9,4 +9,16 @@ Shopping cart implemented in Python with a WebAssembly plugin system. Plugins de
 - [Cargo Component](https://github.com/bytecodealliance/cargo-component)
 - [Justfile](https://github.com/bytecodealliance/cargo-component)
 
+## Setup
+
+```
+git clone git@github.com:alabhyajindal/shopping_cart.git
+cd shopping_cart
+just build
+```
+
 ## Usage
+
+Run `python host/demo.py` to view how the validation works in practice. Run `just test` to run the test suite. All tests should pass. [TODO]
+
+TODO: design doc - talk about wasm component model, and add another plugin
