@@ -43,13 +43,36 @@ class ShoppingCart:
         cart_json = self.to_json()
         errors: List[str] = []
         for plugin_name, plugin in self._plugins.items():
-            result = json.loads(plugin.validate(self._store, cart_json))
-            if not result.get("ok"):
-                error = result.get("error", "Plugin validation failed")
+            raw_result = plugin.validate(self._store, cart_json)
+            ok, error = self._parse_plugin_result(raw_result)
+            if not ok:
                 errors.append(f"[{plugin_name}] {error}")
         if errors:
             return "\n".join(errors)
         return None
+
+    def _parse_plugin_result(self, raw_result: str) -> tuple[bool, str]:
+        try:
+            parsed = json.loads(raw_result)
+        except json.JSONDecodeError as exc:
+            return False, f"Plugin returned invalid JSON: {exc.msg}"
+
+        if not isinstance(parsed, dict):
+            return False, "Plugin returned invalid result shape: expected object"
+
+        ok = parsed.get("ok")
+        error = parsed.get("error")
+
+        if not isinstance(ok, bool):
+            return False, "Plugin returned invalid result shape: 'ok' must be a boolean"
+
+        if not isinstance(error, str):
+            return False, "Plugin returned invalid result shape: 'error' must be a string"
+
+        if ok:
+            return True, ""
+
+        return False, error or "Plugin validation failed"
 
     def add_item(self, item: CartItem) -> None:
         self._items.append(item)
