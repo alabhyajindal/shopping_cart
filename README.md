@@ -14,6 +14,8 @@ This project implements a shopping cart in Python with a WebAssembly plugin syst
 ```
 git clone git@github.com:alabhyajindal/shopping_cart.git
 cd shopping_cart
+pip install -r requirements.txt
+rustup target add wasm32-unknown-unknown
 just build
 ```
 
